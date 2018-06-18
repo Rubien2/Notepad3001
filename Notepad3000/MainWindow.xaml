@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Notepad3000"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Notepad3000" Height="450" Width="800">
     <Grid>
-        
+        <TextBox x:Name="txtFileName"/>
+        <TextBox x:Name="thePerfectNotepad" Margin="0,45,0,0"/>
     </Grid>
 </Window>
