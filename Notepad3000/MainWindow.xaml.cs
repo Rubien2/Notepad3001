@@ -7,16 +7,16 @@ using System.Windows.Controls.Ribbon;
 namespace Notepad3000
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for RibbonWindow.xaml
     /// </summary>
-    public partial class MainWindow : RibbonWindow
+    public partial class RibbonWindow : Window
     {
         string filePath = @"C:\TestNotepad\";
         bool ctrlCheck = false;
         bool sCheck = false;
         bool illegal = false;
 
-        public MainWindow()
+        public RibbonWindow()
         {
             InitializeComponent();
             thePerfectNotepad.PreviewKeyDown += ThePerfectNotepad_PreviewKeyDown;
