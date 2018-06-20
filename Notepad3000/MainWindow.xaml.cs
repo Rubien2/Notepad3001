@@ -95,7 +95,26 @@ namespace Notepad3000
         private void OpenNewFile(bool newOrOpen)
         {
             //if newOrOpen is true, it means btnNewFile has been clicked. If it's false, it means btnOpenFile has been clicked.
-            string fileContents = File.ReadAllText(filePath + txtFileName.Text + ".txt");
+            string fileContents;
+            
+            try
+            {
+                fileContents = File.ReadAllText(filePath + txtFileName.Text + ".txt");
+            }
+            catch (FileNotFoundException f)
+            {
+                DialogResult result = System.Windows.Forms.MessageBox.Show("Do you want to save this as a new file?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+
+                if(result == System.Windows.Forms.DialogResult.Yes)
+                {
+                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtPerfectNotepad.Text);
+                    fileContents = File.ReadAllText(filePath + txtFileName.Text + ".txt");
+                }
+                else
+                {
+                    fileContents = txtPerfectNotepad.Text;
+                }
+            }
 
             if (txtPerfectNotepad.Text != fileContents)
             {
