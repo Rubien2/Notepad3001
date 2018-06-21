@@ -5,21 +5,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ribbon="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     Title="Notepad3000"
-        Width="800" Height="600" ResizeMode="NoResize">
+        Width="800" Height="637" ResizeMode="NoResize">
     <Grid>
-        <TextBox x:Name="txtFileName" Margin="0,141,0,374"/>
-        <TextBox x:Name="txtPerfectNotepad" Margin="0,195,0,0"/>
-        <ribbon:Ribbon x:Name="masterRibbon" Margin="0,0,0,428">
+        <Label Content="Bestandsnaam" Margin="0,141,0,409"/>
+        <TextBox x:Name="txtFileName" Margin="0,166,0,409"/>
+        <Label Content="Tekst" Margin="0,184,0,372"/>
+        <RichTextBox x:Name="txtPerfectNotepad" Margin="0,209,0,0"/>
+        <ribbon:Ribbon x:Name="masterRibbon" Margin="0,0,0,467">
             <ribbon:Ribbon.ApplicationMenu>
-                <ribbon:RibbonApplicationMenu>
+                <ribbon:RibbonApplicationMenu Label="File">
                     <ribbon:RibbonApplicationMenuItem x:Name="btnNewFile" Header="New file" Click="btnNewFile_Click"/>
-                    <ribbon:RibbonApplicationMenuItem Header="Open file" x:Name="btnOpenFile" Click="btnOpenFile_Click"/>
+                    <ribbon:RibbonApplicationMenuItem x:Name="btnOpenFile" Header="Open file" Click="btnOpenFile_Click"/>
+                    <ribbon:RibbonApplicationMenuItem x:Name="btnSaveFile" Header="Save file" Click="RibbonSaveButton_Click"/>
                 </ribbon:RibbonApplicationMenu>
             </ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonTab Header="Home">
                 <ribbon:RibbonGroup>
-                    <RibbonButton Width="70" Height="17" Label="Copy" SmallImageSource="C:\Users\rdavelaar\Pictures\icon.ico"/>
-                    <RibbonButton Width="70" Height="17" Label="Paste" SmallImageSource="C:\Users\rdavelaar\Pictures\icon.ico"/>
+                    <RibbonButton x:Name="ribbonCopyButton" Width="70" Height="20" Label="Copy" SmallImageSource="C:\Users\rdavelaar\Pictures\icon.ico" Click="RibbonCopyButton_Click"/>
+                    <RibbonButton x:Name="ribbonPasteButton" Width="70" Height="20" Label="Paste" SmallImageSource="C:\Users\rdavelaar\Pictures\icon.ico" Click="RibbonPasteButton_Click"/>
+                </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup>
+                    <ComboBox x:Name="cbxFonts" Width="130" SelectionChanged="CbxFonts_SelectionChanged"/>
+                    <ComboBox x:Name="cbxFontSize" Width="130" SelectionChanged="cbxFontSize_SelectionChanged" Margin="0,10,0,-10"/>
                 </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>

@@ -4,6 +4,10 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Controls.Ribbon;
+using System.Collections.Generic;
+using Media = System.Windows.Media;
+using System.Drawing;
+using System.Windows.Documents;
 
 namespace Notepad3000
 {
@@ -13,20 +17,35 @@ namespace Notepad3000
     public partial class RibbonWindow : Window
     {
         string filePath = @"C:\TestNotepad\";
+        string txtboxContent;
         bool ctrlCheck = false;
         bool sCheck = false;
+        bool btnCheck = false;
         bool illegal = false;
-        
+        List<FontFamily> fontList = new List<FontFamily>();
+        FontFamily familyFont;
 
         public RibbonWindow()
         {
             InitializeComponent();
             txtPerfectNotepad.PreviewKeyDown += ThePerfectNotepad_PreviewKeyDown;
             txtPerfectNotepad.PreviewKeyUp += ThePerfectNotepad_PreviewKeyUp;
+            foreach(FontFamily font in System.Drawing.FontFamily.Families)
+            {
+                fontList.Add(font);
+                cbxFonts.Items.Add(font.Name);
+            }
+        }
+
+        private void GetText()
+        {
+            //Every time you need to save, call this method
+            txtboxContent = new TextRange(txtPerfectNotepad.Document.ContentStart, txtPerfectNotepad.Document.ContentEnd).Text;
         }
 
         private void RibbonSaveButton_Click(object sender, RoutedEventArgs e)
         {
+            btnCheck = true;
             CheckForIllegalChars();
         }
 
@@ -61,22 +80,36 @@ namespace Notepad3000
 
         private void CheckForIllegalChars()
         {
-            foreach (char invalidChar in Path.GetInvalidFileNameChars())
+            if (txtFileName.Text != "")
             {
-                if (txtFileName.Text.Contains(invalidChar))
+                foreach (char invalidChar in Path.GetInvalidFileNameChars())
                 {
-                    illegal = true;
+                    if (txtFileName.Text.Contains(invalidChar))
+                    {
+                        illegal = true;
+                    }
                 }
-            }
 
-            if (!illegal)
-            {
-                File.WriteAllText(filePath + txtFileName.Text + ".txt", txtPerfectNotepad.Text);
-                illegal = false;
+                if (!illegal)
+                {
+                    GetText();
+                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtboxContent);
+                    illegal = false;
+                }
+                else
+                {
+                    System.Windows.MessageBox.Show(@"Ongeldige karakters in bestandsnaam (<, >, :, /, \, |, ?, *), werk bestandsnaam bij");
+                }
             }
             else
             {
-                System.Windows.MessageBox.Show(@"Ongeldige karakters in bestandsnaam (<, >, :, /, \, |, ?, *), werk bestandsnaam bij");
+                if(sCheck && ctrlCheck || btnCheck)
+                {
+                    ctrlCheck = false;
+                    sCheck = false;
+                    btnCheck = false;
+                    System.Windows.MessageBox.Show("Bestandsnaam mag niet leeg zijn. Geef het bestand a.u.b. een naam");
+                }
             }
         }
 
@@ -96,45 +129,45 @@ namespace Notepad3000
         {
             //if newOrOpen is true, it means btnNewFile has been clicked. If it's false, it means btnOpenFile has been clicked.
             string fileContents;
-            
+            GetText();
             try
             {
                 fileContents = File.ReadAllText(filePath + txtFileName.Text + ".txt");
             }
-            catch (FileNotFoundException f)
+            catch (FileNotFoundException)
             {
-                DialogResult result = System.Windows.Forms.MessageBox.Show("Do you want to save this as a new file?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                DialogResult result = System.Windows.Forms.MessageBox.Show("Wilt u dit als een nieuw bestand opslaan?","Save",MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
                 if(result == System.Windows.Forms.DialogResult.Yes)
                 {
-                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtPerfectNotepad.Text);
+                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtboxContent);
                     fileContents = File.ReadAllText(filePath + txtFileName.Text + ".txt");
                 }
                 else
                 {
-                    fileContents = txtPerfectNotepad.Text;
+                    fileContents = txtboxContent;
                 }
             }
 
-            if (txtPerfectNotepad.Text != fileContents)
+            if (txtboxContent != fileContents)
             {
-                DialogResult result = System.Windows.Forms.MessageBox.Show("You will lose progress if you open a new file. Would you like to save before opening a new file?", "Save", MessageBoxButtons.YesNoCancel);
+                DialogResult result = System.Windows.Forms.MessageBox.Show("U verliest de veranderingen die u heeft gemaakt als u een nieuw bestand opent. Wilt u opslaan voordat u verdergaat?", "Save", MessageBoxButtons.YesNoCancel);
 
                 if (result == System.Windows.Forms.DialogResult.Yes && newOrOpen)
                 {
-                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtPerfectNotepad.Text);
+                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtboxContent);
                     txtFileName.Text = "";
-                    txtPerfectNotepad.Text = "";
+                    txtPerfectNotepad.Document.Blocks.Clear();
                 }
                 else if (result == System.Windows.Forms.DialogResult.Yes && !newOrOpen)
                 {
-                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtPerfectNotepad.Text);
+                    File.WriteAllText(filePath + txtFileName.Text + ".txt", txtboxContent);
                     OpenExplorer();
                 }
                 else if (result == System.Windows.Forms.DialogResult.No && newOrOpen)
                 {
                     txtFileName.Text = "";
-                    txtPerfectNotepad.Text = "";
+                    txtPerfectNotepad.Document.Blocks.Clear();
                 }
                 else if(result == System.Windows.Forms.DialogResult.No && !newOrOpen)
                 {
@@ -146,7 +179,7 @@ namespace Notepad3000
                 if (newOrOpen)
                 {
                     txtFileName.Text = "";
-                    txtPerfectNotepad.Text = "";
+                    txtPerfectNotepad.Document.Blocks.Clear();
                 }
                 else if (!newOrOpen)
                 {
@@ -169,9 +202,52 @@ namespace Notepad3000
                     string selectedFile = open.FileName;
                     string selectedFileName = Path.GetFileNameWithoutExtension(open.FileName);
                     txtFileName.Text = selectedFileName;
-                    txtPerfectNotepad.Text = File.ReadAllText(selectedFile);
+
+                    txtPerfectNotepad.Document.Blocks.Clear();
+                    txtPerfectNotepad.Document.Blocks.Add(new Paragraph(new Run(File.ReadAllText(selectedFile))));
+                    //txtPerfectNotepad.Text = File.ReadAllText(selectedFile);
                 }
             }
+        }
+
+        private void RibbonCopyButton_Click(object sender, RoutedEventArgs e)
+        {
+            GetText();
+            System.Windows.Clipboard.SetText(txtboxContent);
+        }
+
+        private void RibbonPasteButton_Click(object sender, RoutedEventArgs e)
+        {
+            txtPerfectNotepad.Document.Blocks.Add(new Paragraph(new Run(System.Windows.Clipboard.GetText())));
+        }
+
+        private void CbxFonts_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            string selectedFont = cbxFonts.SelectedValue.ToString();
+
+            foreach (FontFamily font in fontList)
+            {
+                if (font.Name == selectedFont)
+                {
+                    familyFont = font;
+                }
+            }
+            //To change the font of the textbox, it needs a FontFamily from System.Media
+            Media.FontFamily mfont = new Media.FontFamily(familyFont.Name);
+
+            if (txtPerfectNotepad.Selection.IsEmpty)
+            {
+                txtPerfectNotepad.FontFamily = mfont;
+            }
+            else
+            {
+                txtPerfectNotepad.Selection.ApplyPropertyValue(TextElement.FontFamilyProperty, mfont);
+            }
+        }
+
+        private void cbxFontSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
