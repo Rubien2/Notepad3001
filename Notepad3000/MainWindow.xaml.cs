@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Media = System.Windows.Media;
 using System.Drawing;
 using System.Windows.Documents;
+using System;
 
 namespace Notepad3000
 {
@@ -18,6 +19,7 @@ namespace Notepad3000
     {
         string filePath = @"C:\TestNotepad\";
         string txtboxContent;
+        double d = 0.00;
         bool ctrlCheck = false;
         bool sCheck = false;
         bool btnCheck = false;
@@ -30,10 +32,15 @@ namespace Notepad3000
             InitializeComponent();
             txtPerfectNotepad.PreviewKeyDown += ThePerfectNotepad_PreviewKeyDown;
             txtPerfectNotepad.PreviewKeyUp += ThePerfectNotepad_PreviewKeyUp;
+
             foreach(FontFamily font in System.Drawing.FontFamily.Families)
             {
                 fontList.Add(font);
                 cbxFonts.Items.Add(font.Name);
+            }
+            for (int i = 8; i < 21; i++)
+            {
+                cbxFontSize.Items.Add(i);
             }
         }
 
@@ -245,9 +252,18 @@ namespace Notepad3000
             }
         }
 
-        private void cbxFontSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void CbxFontSize_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-
+            if (txtPerfectNotepad.Selection.IsEmpty)
+            {
+                d = Convert.ToDouble(cbxFontSize.SelectedValue);
+                txtPerfectNotepad.FontSize = d;
+            }
+            else
+            {
+                d = Convert.ToDouble(cbxFontSize.SelectedValue);
+                txtPerfectNotepad.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, d);
+            }
         }
     }
 }
