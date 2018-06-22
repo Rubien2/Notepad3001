@@ -30,6 +30,18 @@
                     <Label Content="Lettergrootte"/>
                     <ComboBox x:Name="cbxFontSize" Width="130" SelectionChanged="CbxFontSize_SelectionChanged"/>
                 </ribbon:RibbonGroup>
+                <ribbon:RibbonGroup>
+                    <Label Content="Veranderingen"/>
+                    <ribbon:RibbonControlGroup x:Name="ribbonControlGroup">
+                        <ribbon:RibbonControlGroup.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ribbon:RibbonControlGroup.ItemsPanel>
+                        <ribbon:RibbonButton x:Name="btnUndo" Label="Undo" Height="20" Click="BtnUndo_Click"/>
+                        <ribbon:RibbonButton x:Name="btnRedo" Label="Redo" Height="20" Click="BtnRedo_Click"/>
+                    </ribbon:RibbonControlGroup>
+                </ribbon:RibbonGroup>
             </ribbon:RibbonTab>
         </ribbon:Ribbon>
     </Grid>

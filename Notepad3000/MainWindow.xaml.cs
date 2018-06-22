@@ -46,7 +46,7 @@ namespace Notepad3000
 
         private void GetText()
         {
-            //Every time you need to save, call this method
+            //Every time it needs to save, call this method
             txtboxContent = new TextRange(txtPerfectNotepad.Document.ContentStart, txtPerfectNotepad.Document.ContentEnd).Text;
         }
 
@@ -264,6 +264,16 @@ namespace Notepad3000
                 d = Convert.ToDouble(cbxFontSize.SelectedValue);
                 txtPerfectNotepad.Selection.ApplyPropertyValue(TextElement.FontSizeProperty, d);
             }
+        }
+
+        private void BtnUndo_Click(object sender, RoutedEventArgs e)
+        {
+            txtPerfectNotepad.Undo();
+        }
+
+        private void BtnRedo_Click(object sender, RoutedEventArgs e)
+        {
+            txtPerfectNotepad.Redo();
         }
     }
 }
