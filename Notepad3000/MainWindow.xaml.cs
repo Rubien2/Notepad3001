@@ -120,13 +120,13 @@ namespace Notepad3000
             }
         }
 
-        private void btnNewFile_Click(object sender, RoutedEventArgs e)
+        private void BtnNewFile_Click(object sender, RoutedEventArgs e)
         {
             bool newFile = true;
             OpenNewFile(newFile);
         }
 
-        private void btnOpenFile_Click(object sender, RoutedEventArgs e)
+        private void BtnOpenFile_Click(object sender, RoutedEventArgs e)
         {
             bool openFile = false;
             OpenNewFile(openFile);

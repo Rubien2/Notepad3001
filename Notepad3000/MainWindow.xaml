@@ -14,8 +14,8 @@
         <ribbon:Ribbon x:Name="masterRibbon" Margin="0,0,0,467">
             <ribbon:Ribbon.ApplicationMenu>
                 <ribbon:RibbonApplicationMenu Label="File">
-                    <ribbon:RibbonApplicationMenuItem x:Name="btnNewFile" Header="New file" Click="btnNewFile_Click"/>
-                    <ribbon:RibbonApplicationMenuItem x:Name="btnOpenFile" Header="Open file" Click="btnOpenFile_Click"/>
+                    <ribbon:RibbonApplicationMenuItem x:Name="btnNewFile" Header="New file" Click="BtnNewFile_Click"/>
+                    <ribbon:RibbonApplicationMenuItem x:Name="btnOpenFile" Header="Open file" Click="BtnOpenFile_Click"/>
                     <ribbon:RibbonApplicationMenuItem x:Name="btnSaveFile" Header="Save file" Click="RibbonSaveButton_Click"/>
                 </ribbon:RibbonApplicationMenu>
             </ribbon:Ribbon.ApplicationMenu>
