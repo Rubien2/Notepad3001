@@ -19,6 +19,7 @@ namespace Notepad3000
     {
         string filePath = @"C:\TestNotepad\";
         string txtboxContent;
+        string clipboardContent;
         double d = 0.00;
         bool ctrlCheck = false;
         bool sCheck = false;
@@ -42,6 +43,11 @@ namespace Notepad3000
             {
                 cbxFontSize.Items.Add(i);
             }
+        }
+
+        private void SelectedText()
+        {
+            clipboardContent = txtPerfectNotepad.Selection.Text;
         }
 
         private void GetText()
@@ -212,15 +218,21 @@ namespace Notepad3000
 
                     txtPerfectNotepad.Document.Blocks.Clear();
                     txtPerfectNotepad.Document.Blocks.Add(new Paragraph(new Run(File.ReadAllText(selectedFile))));
-                    //txtPerfectNotepad.Text = File.ReadAllText(selectedFile);
                 }
             }
         }
 
+        private void RibbonCutButton_Click(object sender, RoutedEventArgs e)
+        {
+            SelectedText();
+            System.Windows.Clipboard.SetText(clipboardContent);
+            txtPerfectNotepad.Selection.Text = "";
+        }
+
         private void RibbonCopyButton_Click(object sender, RoutedEventArgs e)
         {
-            GetText();
-            System.Windows.Clipboard.SetText(txtboxContent);
+            SelectedText();
+            System.Windows.Clipboard.SetText(clipboardContent);
         }
 
         private void RibbonPasteButton_Click(object sender, RoutedEventArgs e)

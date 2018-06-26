@@ -21,8 +21,9 @@
             </ribbon:Ribbon.ApplicationMenu>
             <ribbon:RibbonTab Header="Home">
                 <ribbon:RibbonGroup>
-                    <RibbonButton x:Name="ribbonCopyButton" Width="70" Height="20" Label="Copy" SmallImageSource="C:\Users\rdavelaar\Pictures\icon.ico" Click="RibbonCopyButton_Click"/>
-                    <RibbonButton x:Name="ribbonPasteButton" Width="70" Height="20" Label="Paste" SmallImageSource="C:\Users\rdavelaar\Pictures\icon.ico" Click="RibbonPasteButton_Click"/>
+                    <RibbonButton x:Name="ribbonCutButton" Width="70" Height="20" Label="Cut" Click="RibbonCutButton_Click"/>
+                    <RibbonButton x:Name="ribbonCopyButton" Width="70" Height="20" Label="Copy" Click="RibbonCopyButton_Click"/>
+                    <RibbonButton x:Name="ribbonPasteButton" Width="70" Height="20" Label="Paste" Click="RibbonPasteButton_Click"/>
                 </ribbon:RibbonGroup>
                 <ribbon:RibbonGroup>
                     <Label Content="Lettertype"/>
